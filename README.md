@@ -1,2 +1,3 @@
 # gs-bot-vrisca-system
-Bot Using Google Framework (Google App Script)
+Source Code Vrisca System 2.0
+Hanya untuk internal perusahaan. Dilarang menyebarluaskan tanpa seizin dari developer
