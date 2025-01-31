@@ -1,20 +1,7 @@
 /* 
-**                    Bot => @IOCWSumut_bot
+**                    Lib Version => 2.0
 **                  Last Update : 08/06/2021
 **                        Dev By : Zanie 
-**    ****************************************************
-**    ****************************************************
-**    **                  Licensi :                     **
-**    **   - Skrip dan segala yang terdapat disini      **
-**    **     sepenuhnya milik WOC Sumut Dev             **
-**    **                                                **
-**    **   - Tidak diizinkan mengubah, menyalin,        **
-**    **     menyebarluaskan tanpa izin dari programmer **
-**    **                                                **
-**    **   - Untuk Request Bot ataupun beli source code **
-**    **     dapat menghubungi @FALL0UT                 **
-**    ****************************************************
-**    ****************************************************
 **
 **
 **
@@ -26,7 +13,7 @@ const token         = "your-bot-token"; // Fill With Your own bot token
 const telegramUrl   = "https://api.telegram.org/bot" + token;
 const webAppUrl     = "your-webapp-url"; // Fill with your own google app url
 const ssId          = "your-spreadsheet"; // Fill with your own spreadsheet ID
-const cfgssID       = 'optional' // If you want to make a backup spreadsheet, Fill it with your own backup spreadsheet ID. If you don't, just remove this line
+const cfgssID       = 'optional' // If you want to make a backup or log spreadsheet seperetly from main spreadsheet, Fill it with your own backup spreadsheet ID. If you don't, just remove this line
 const adminID       = 000000 // Your Telegram ID. Use this for debugging. 
 // ===================================================End of Constanta========================================================
 
@@ -61,118 +48,46 @@ function sendHTML(id,message_id,text,HTML) {
 }
 
 function doGet(e) {
-  return HtmlService.createHtmlOutput("Hi! Me bot");
+  return HtmlService.createHtmlOutput("It's Work");
 }
 
 function doPost(e) {
-const data      = JSON.parse(e.postData.contents);
-let text        = data.message.text;
-let id          = data.message.chat.id;
-let name        = data.message.from.first_name
-                    if(data.message.from.last_name) {
+const data        = JSON.parse(e.postData.contents); // Parse data 
+const text        = data.message.text;
+const id          = data.message.chat.id;
+const name        = data.message.from.first_name
+                      if(data.message.from.last_name) {
                         name += ' ' + data.message.from.last_name
-                    }
-let message_id  = data.message.message_id
-let user_id     = data.message.from.id
-let username    = data.message.from.username
-let groupname   = data.message.chat.title
-let type        = data.message.chat.type
-let newMember   = data.message.new_chat_member
-let markdown    = 'markdown'
-let HTML        = 'HTML'
-var responNoss  = '💾 Laporan Noss dengan ID '+orderID+' berhasil diteruskan ke HD WOC. Mohon menunggu'
-var responOrder = '💾 Laporan Order dengan ID '+orderID+' berhasil diteruskan ke HD WOC. Mohon menunggu'
-var responUim   = '💾 Laporan UIM dengan ID '+orderID+' berhasil diteruskan ke HD Daman. Mohon menunggu'
-var responLogic = '💾 Laporan Logic dengan ID '+orderID+' berhasil diteruskan ke Logic On Desk. Mohon menunggu'
-var responWifi  = '💾 Laporan Wifi dengan ID '+orderID+' berhasil diteruskan ke HD BGES. Mohon menunggu'
-var falseFormat = '❌ Format Kamu salah. Ketik !help untuk melihat format yang tersedia'
+                      };
+const message_id  = data.message.message_id;
+const user_id     = data.message.from.id;
+const username    = data.message.from.username;
+const groupname   = data.message.chat.title;
+const type        = data.message.chat.type;
+const newMember   = data.message.new_chat_member;
+const markdown    = 'markdown';
+const HTML        = 'HTML';
+const success     = 'Congrats! Your Data Has Been Save To Our Databases';
+const failed      = 'Something Wrong With Your Input. Please Try Again Later';
 
-    if(type == 'supergroup') {
-        // START OF #NOSS  
+    // If you want bot active in group, Keep this line. If you don't, remove the line below
+    if(type == 'supergroup' || 'group') {
       try {
             if(/^#moban #noss/gis.test(text)) {
             var sheetName = 'NOSS';
-            var sheet     = SpreadsheetApp.openById(ssId).getSheetByName(sheetName)
+            var sheet     = SpreadsheetApp.openById(ssId).getSheetByName(sheetName);
             sheet.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
-            sendMessage(id, message_id, responNoss);
+            sendMessage(id, message_id, success);
             }
         } catch(err) {
-            sendMessage(id, message_id, falseFormat)
+            sendMessage(id, message_id, failed)
         }
         // END OF #NOSS
 
-
-        // START OF #ORDER
-        try {
-            if(/^#moban #order/gis.test(text)) {
-            var sheetName = 'ORDER';
-            var sheet     = SpreadsheetApp.openById(ssId).getSheetByName(sheetName)
-            sheet.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
-            sendMessage(id, message_id, responOrder);
-            }
-        } catch(err) {
-            sendMessage(id, message_id, falseFormat)
-        }
-        // END OF #ORDER
-
-
-        // START OF #UIM
-        try {
-            if(/^#moban #uim/gis.test(text)) {
-            var sheetName = 'UIM';
-            var sheet     = SpreadsheetApp.openById(ssId).getSheetByName(sheetName)
-            sheet.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
-            sendMessage(id, message_id, responUim);
-            }
-        } catch(err) {
-            sendMessage(id, message_id, falseFormat)
-        }
-        // END OF #UIM
-        
-        
-        // START OF #LOGIC
-        try {
-            if(/^#moban #logic/gis.test(text)) {
-            var sheetName = 'LOGIC';
-            var sheet     = SpreadsheetApp.openById(ssId).getSheetByName(sheetName)
-            sheet.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
-            sendMessage(id, message_id, responLogic);
-            }
-        } catch(err) {
-            sendMessage(id, message_id, falseFormat)
-        }
-        // END OF #LOGIC
-
-        // START OF #WIFI
-        try {
-            if(/^#moban #wifi/gis.test(text)) {
-            var sheetName = 'WIFI';
-            var sheet     = SpreadsheetApp.openById(ssId).getSheetByName(sheetName)
-            sheet.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
-            sendMessage(id, message_id, responWifi);
-            }
-        } catch(err) {
-            sendMessage(id, message_id, falseFormat)
-        }
-        // END OF #WIFI
-        
-
         if(/^!help/gis.test(text)) {
-            var help = '\n==- Format -== \n\n'
-                help += '#moban #noss      => Khusus push order OSM (Prov. Start -  Prov. Completed, Fallout Act, Fallout OSM)\n'
-                help += '#moban #order     => Khusus push order ke Teknisi (PI)\n'
-                help += '#moban #uim       => Khusus push order UIM (Fallout UIM, Update data service)\n'
-                help += '#moban #logic     => Khusus push order Logic (Cabut Ponr)\n'
-                help += '#moban #wifi      => Khusus push order Wifi\n'
-                help += '\n *Order diluar hastag dan status yang ditentukan akan kami kembalikan ke user dan silahkan push ke PIC yang sudah ada*\n'
-                help += '\n==- Contoh -==\n'
-                help += '\n#moban #noss \nTipe : \nSCID : \nKeterangan :\n'
-                help += '\n#moban #order \nTipe : \nSCID : \nKeterangan :\n'
-                help += '\n#moban #uim \nTipe : \nSCID/ND : \nKeterangan :\n'
-                help += '\n#moban #logic \nSCID/ND : \nKeterangan : \nAlasan :\n'
-                help += '\n#moban #wifi \nTipe : \nSCID : \nKeterangan :\n'
-            var sheetName = 'private';
-            var shtcfg    = SpreadsheetApp.openById(cfgssID).getSheetByName(sheetName)
+            var help        = 'This is a Help Wizard'
+            var sheetName   = 'private'; // Save for Logs if needed. Remove it when not needed.
+            var shtcfg      = SpreadsheetApp.openById(cfgssID).getSheetByName(sheetName)
             shtcfg.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
             sendMarkdown(id, message_id, help, markdown)
         }
@@ -190,8 +105,8 @@ var falseFormat = '❌ Format Kamu salah. Ketik !help untuk melihat format yang 
         
         //  id checker
         if(/^!id/gis.test(text)) {
-          var idGrupreq   = 'ID Anda : '+user_id+'\n'
-              idGrupreq  += 'ID grup Anda : '+id+''
+          var idGrupreq   = 'Ypur ID : '+user_id+'\n'
+              idGrupreq  += 'Your Group ID : '+id+''
           var sheetName   = 'private';
           var shtcfg      = SpreadsheetApp.openById(cfgssID).getSheetByName(sheetName)
           shtcfg.appendRow([t,id, groupname, user_id, name, username, message_id, text]);
@@ -239,9 +154,7 @@ var falseFormat = '❌ Format Kamu salah. Ketik !help untuk melihat format yang 
 
         if(/^!admin/gis.test(text)) {
             var admin = 'Jajaran Admin : \n============\n'
-                admin += 'Zanie   => 👦🏻 \n'
-                admin += 'Ade     => 👨🏻 \n'
-                admin += 'Arif    => 👦🏻 \n'
+                admin += 'Jhon Doe   => 👦🏻 \n'
                 admin += 'Vrisca  => 👩🏻'
             var sheetName = 'private';
             var shtcfg = SpreadsheetApp.openById(cfgssID).getSheetByName(sheetName) ? SpreadsheetApp.openById(cfgssID).getSheetByName (sheetName) : SpreadsheetApp.openById(cfgssID).insertSheet(sheetName)
@@ -261,7 +174,7 @@ var falseFormat = '❌ Format Kamu salah. Ketik !help untuk melihat format yang 
 
         if(/^!about/gis.test(text)) {
             var about = '======================================\n'
-                about += '== Nama bot : IOCW-Sumut Care Bot           ==\n'
+                about += '== Nama bot : **           ==\n'
                 about += '== Version : 2.2.0                                                   ==\n'
                 about += '== Developer = Zanie                                           ==\n'
                 about += '== Last Update : 25/05/2021                             ==\n'
